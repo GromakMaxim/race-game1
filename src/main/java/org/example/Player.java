@@ -11,7 +11,7 @@ public class Player extends JPanel {
     private Image img;
 
     private int speed;
-    private int maxSpeed = 200;
+    private int maxSpeed = 140;
     private int deltaSpeed;
     private int maxDistance;
 
@@ -57,13 +57,17 @@ public class Player extends JPanel {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                this.posY -= 10;
-                this.img = new ImageIcon("src/main/resources/car_up.png").getImage();
+                if (this.posY > 50 && this.speed != 0) {
+                    this.posY -= 10;
+                    this.img = new ImageIcon("src/main/resources/car_up.png").getImage();
+                }
                 break;
 
             case KeyEvent.VK_DOWN:
-                this.posY += 10;
-                this.img = new ImageIcon("src/main/resources/car_down.png").getImage();
+                if (this.posY < 450 && this.speed != 0) {
+                    this.posY += 10;
+                    this.img = new ImageIcon("src/main/resources/car_down.png").getImage();
+                }
                 break;
 
             case KeyEvent.VK_RIGHT:
