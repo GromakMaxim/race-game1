@@ -20,6 +20,7 @@ public class Road extends JPanel implements ActionListener {
     @Override
     public void paint(Graphics g) {
         g.drawImage(this.img, this.player.getLayer1(), 0, null);
+        g.drawImage(this.img, this.player.getLayer2(), 0, null);
         g.drawImage(this.player.getImg(), this.player.getPosX(), this.player.getPosY(), null);
     }
 

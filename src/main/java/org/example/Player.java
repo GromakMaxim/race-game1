@@ -18,6 +18,7 @@ public class Player extends JPanel {
     private int posY;
 
     private int layer1;
+    private int layer2;
 
 
     public Player() {
@@ -30,11 +31,19 @@ public class Player extends JPanel {
         this.posY = 30;
 
         this.layer1 = 0;
+        this.layer2 = 1600;
     }
 
-    public void move(){
+    public void move() {
         this.maxDistance += this.speed;
-        this.layer1 -= this.speed;
+
+        if (this.layer2 - this.speed <= 0) {
+            this.layer1 = 0;
+            this.layer2 = 1600;
+        } else {
+            this.layer1 -= this.speed;
+            this.layer2 -= this.speed;
+        }
     }
 
     @Override
