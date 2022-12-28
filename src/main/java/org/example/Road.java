@@ -1,22 +1,41 @@
 package org.example;
 
+import lombok.Getter;
+import org.example.models.Enemy;
+import org.example.models.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Road extends JPanel implements ActionListener {
+public class Road extends JPanel implements ActionListener, Runnable {
     private final Image img;
+    @Getter
     private final Player player;
     private Timer mainTimer;
 
+    private Thread enemiesFactory;
+
+    private List<Enemy> enemies;
+
     public Road() {
-        this.img = new ImageIcon("src/main/resources/road.png").getImage();
+        this.img = new ImageIcon("src/main/resources/scene/road.png").getImage();
+
         this.player = new Player();
-        this.mainTimer = new Timer(29, this);
+        this.enemies = new CopyOnWriteArrayList(new ArrayList<Enemy>());
+        this.enemiesFactory = new Thread(this);
+
+        this.mainTimer = new Timer(20, this);
         this.mainTimer.start();
+        this.enemiesFactory.start();
 
         addKeyListener(new MyKeyAdapter());
         setFocusable(true);
@@ -27,12 +46,40 @@ public class Road extends JPanel implements ActionListener {
         g.drawImage(this.img, this.player.getLayer1(), 0, null);
         g.drawImage(this.img, this.player.getLayer2(), 0, null);
         g.drawImage(this.player.getImg(), this.player.getPosX(), this.player.getPosY(), null);
+
+        for (Enemy enemy : this.enemies) {
+            if (enemy.getPosX() >= 2400 || enemy.getPosX() <= -2400){
+                this.enemies.remove(enemy);
+            } else {
+                g.drawImage(enemy.getImg(), enemy.getPosX(), enemy.getPosY(), null);
+            }
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         this.player.move();
+        this.enemies.forEach(Enemy::move);
         repaint();
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            Random rnd = new Random();
+            try {
+                Thread.sleep(rnd.nextInt(2_000));
+                this.enemies.add(
+                        new Enemy(1600,
+                                  rnd.nextInt(550),
+                                  0,
+                                  this)
+                );
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private class MyKeyAdapter extends KeyAdapter {

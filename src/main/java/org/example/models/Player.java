@@ -1,4 +1,4 @@
-package org.example;
+package org.example.models;
 
 import lombok.Getter;
 
@@ -7,24 +7,17 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 @Getter
-public class Player extends JPanel {
-    private Image img;
-
-    private int speed;
-    private int maxSpeed = 140;
+public class Player extends AbstractModel {
+    private int maxSpeed = 100;
     private int deltaSpeed;
     private int maxDistance;
-
-
-    private int posX;
-    private int posY;
 
     private int layer1;
     private int layer2;
 
 
     public Player() {
-        this.img = new ImageIcon("src/main/resources/car.png").getImage();
+        this.img = new ImageIcon("src/main/resources/player/car.png").getImage();
         this.speed = 10;
         this.deltaSpeed = 0;
         this.maxDistance = 0;
@@ -59,14 +52,14 @@ public class Player extends JPanel {
             case KeyEvent.VK_UP:
                 if (this.posY > 50 && this.speed != 0) {
                     this.posY -= 10;
-                    this.img = new ImageIcon("src/main/resources/car_up.png").getImage();
+                    this.img = new ImageIcon("src/main/resources/player/car_up.png").getImage();
                 }
                 break;
 
             case KeyEvent.VK_DOWN:
                 if (this.posY < 450 && this.speed != 0) {
                     this.posY += 10;
-                    this.img = new ImageIcon("src/main/resources/car_down.png").getImage();
+                    this.img = new ImageIcon("src/main/resources/player/car_down.png").getImage();
                 }
                 break;
 
@@ -90,7 +83,7 @@ public class Player extends JPanel {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_DOWN:
-                this.img = new ImageIcon("src/main/resources/car.png").getImage();
+                this.img = new ImageIcon("src/main/resources/player/car.png").getImage();
                 break;
         }
     }
