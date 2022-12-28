@@ -11,6 +11,7 @@ public class Player extends JPanel {
     private Image img;
 
     private int speed;
+    private int maxSpeed = 200;
     private int deltaSpeed;
     private int maxDistance;
 
@@ -37,6 +38,7 @@ public class Player extends JPanel {
 
     public void move() {
         this.maxDistance += this.speed;
+        this.speed += this.deltaSpeed;
 
         if (this.layer2 - this.speed <= 0) {
             this.layer1 = 0;
@@ -53,10 +55,39 @@ public class Player extends JPanel {
     }
 
     public void keyPressed(KeyEvent e) {
-        JOptionPane.showMessageDialog(null, "key pressed");
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                this.posY -= 10;
+                this.img = new ImageIcon("src/main/resources/car_up.png").getImage();
+                break;
+
+            case KeyEvent.VK_DOWN:
+                this.posY += 10;
+                this.img = new ImageIcon("src/main/resources/car_down.png").getImage();
+                break;
+
+            case KeyEvent.VK_RIGHT:
+                if (this.speed < maxSpeed) {
+                    this.speed += 1;
+                    System.out.println(this.speed);
+                }
+                break;
+
+            case KeyEvent.VK_LEFT:
+                if (this.speed > 0) {
+                    this.speed -= 1;
+                    System.out.println(this.speed);
+                }
+                break;
+        }
     }
 
     public void keyReleased(KeyEvent e) {
-        JOptionPane.showMessageDialog(null, "key released");
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_DOWN:
+                this.img = new ImageIcon("src/main/resources/car.png").getImage();
+                break;
+        }
     }
 }
