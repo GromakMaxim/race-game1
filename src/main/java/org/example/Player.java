@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 @Getter
 public class Player extends JPanel {
@@ -49,5 +50,13 @@ public class Player extends JPanel {
     @Override
     public void paint(Graphics g) {
         g.drawImage(this.img, 100, 100, null);
+    }
+
+    public void keyPressed(KeyEvent e) {
+        JOptionPane.showMessageDialog(null, "key pressed");
+    }
+
+    public void keyReleased(KeyEvent e) {
+        JOptionPane.showMessageDialog(null, "key released");
     }
 }
