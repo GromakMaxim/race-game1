@@ -9,6 +9,7 @@ public class App {
         JFrame f = new JFrame("Java F1");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setSize(new Dimension(1100, 600));
+        f.add(new Road());
         f.setVisible(true);
     }
 }
