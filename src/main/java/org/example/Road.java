@@ -11,30 +11,32 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static java.util.Objects.requireNonNull;
 
 public class Road extends JPanel implements ActionListener, Runnable {
     private final Image img;
     @Getter
     private final Player player;
-    private Timer mainTimer;
-
-    private Thread enemiesFactory;
-
-    private List<Enemy> enemies;
+    private final CopyOnWriteArrayList<Enemy> enemies;
+    private final Timer mainTimer;
+    private final Thread enemiesFactory;
+    private final Thread musicWorker;
 
     public Road() {
-        this.img = new ImageIcon("src/main/resources/scene/road.png").getImage();
+        this.img = new ImageIcon(requireNonNull(this.getClass().getResource("/scene/road.png"))).getImage();
 
         this.player = new Player();
         this.enemies = new CopyOnWriteArrayList(new ArrayList<Enemy>());
         this.enemiesFactory = new Thread(this);
+        this.musicWorker = new Thread(new Audio());
 
         this.mainTimer = new Timer(20, this);
         this.mainTimer.start();
         this.enemiesFactory.start();
+        this.musicWorker.start();
 
         addKeyListener(new MyKeyAdapter());
         setFocusable(true);
@@ -46,7 +48,7 @@ public class Road extends JPanel implements ActionListener, Runnable {
         g.drawImage(this.img, this.player.getLayer2(), 0, null);
         g.drawImage(this.player.getImg(), this.player.getPosX(), this.player.getPosY(), null);
 
-        double displayingSpeed = (200 / this.player.getMaxSpeed()) * this.player.getSpeed();
+        int displayingSpeed = (200 / this.player.getMaxSpeed()) * this.player.getSpeed();
         g.setColor(Color.WHITE);
         Font font = new Font("Arial", Font.ITALIC, 20);
         g.setFont(font);
@@ -66,12 +68,20 @@ public class Road extends JPanel implements ActionListener, Runnable {
         this.player.move();
         this.enemies.forEach(Enemy::move);
         this.findCollisionWithEnemies();
+        this.checkWinningCondition();
         repaint();
     }
 
+    private void checkWinningCondition() {
+        if (this.player.getDistance() > 20_000) {
+            JOptionPane.showMessageDialog(null, "Вы победитель!");
+            System.exit(0);
+        }
+    }
+
     private void findCollisionWithEnemies() {
-        this.enemies.forEach(enemy->{
-            if(this.player.getRectangle().intersects(enemy.getRectangle())){
+        this.enemies.forEach(enemy -> {
+            if (this.player.getRectangle().intersects(enemy.getRectangle())) {
                 JOptionPane.showMessageDialog(null, "Вы проиграли!");
                 System.exit(1);
             }

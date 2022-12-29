@@ -6,21 +6,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import static java.util.Objects.requireNonNull;
+
 @Getter
 public class Player extends AbstractModel {
-    private int maxSpeed = 100;
-    private int deltaSpeed;
-    private int maxDistance;
+    private final int maxSpeed = 100;
+    private final int deltaSpeed;
+    private int distance;
 
     private int layer1;
     private int layer2;
 
 
     public Player() {
-        this.img = new ImageIcon("src/main/resources/player/car.png").getImage();
+        this.img = new ImageIcon(requireNonNull(this.getClass().getResource("/player/car.png"))).getImage();
         this.speed = 10;
         this.deltaSpeed = 0;
-        this.maxDistance = 0;
+        this.distance = 0;
 
         this.posX = 100;
         this.posY = 30;
@@ -30,7 +32,7 @@ public class Player extends AbstractModel {
     }
 
     public void move() {
-        this.maxDistance += this.speed;
+        this.distance += this.speed;
         this.speed += this.deltaSpeed;
 
         if (this.layer2 - this.speed <= 0) {
@@ -52,14 +54,14 @@ public class Player extends AbstractModel {
             case KeyEvent.VK_UP:
                 if (this.posY > 50 && this.speed != 0) {
                     this.posY -= 10;
-                    this.img = new ImageIcon("src/main/resources/player/car_up.png").getImage();
+                    this.img = new ImageIcon(requireNonNull(this.getClass().getResource("/player/car_up.png"))).getImage();
                 }
                 break;
 
             case KeyEvent.VK_DOWN:
                 if (this.posY < 450 && this.speed != 0) {
                     this.posY += 10;
-                    this.img = new ImageIcon("src/main/resources/player/car_down.png").getImage();
+                    this.img = new ImageIcon(requireNonNull(this.getClass().getResource("/player/car_down.png"))).getImage();
                 }
                 break;
 
@@ -83,7 +85,7 @@ public class Player extends AbstractModel {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_DOWN:
-                this.img = new ImageIcon("src/main/resources/player/car.png").getImage();
+                this.img = new ImageIcon(requireNonNull(this.getClass().getResource("/player/car.png"))).getImage();
                 break;
         }
     }
