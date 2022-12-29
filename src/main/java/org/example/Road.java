@@ -46,6 +46,12 @@ public class Road extends JPanel implements ActionListener, Runnable {
         g.drawImage(this.img, this.player.getLayer2(), 0, null);
         g.drawImage(this.player.getImg(), this.player.getPosX(), this.player.getPosY(), null);
 
+        double displayingSpeed = (200 / this.player.getMaxSpeed()) * this.player.getSpeed();
+        g.setColor(Color.WHITE);
+        Font font = new Font("Arial", Font.ITALIC, 20);
+        g.setFont(font);
+        g.drawString("Скорость: " + displayingSpeed + " км/ч", 30, 20);
+
         for (Enemy enemy : this.enemies) {
             if (enemy.getPosX() >= 2400 || enemy.getPosX() <= -2400) {
                 this.enemies.remove(enemy);
