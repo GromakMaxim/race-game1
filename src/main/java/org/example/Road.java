@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -48,7 +47,7 @@ public class Road extends JPanel implements ActionListener, Runnable {
         g.drawImage(this.player.getImg(), this.player.getPosX(), this.player.getPosY(), null);
 
         for (Enemy enemy : this.enemies) {
-            if (enemy.getPosX() >= 2400 || enemy.getPosX() <= -2400){
+            if (enemy.getPosX() >= 2400 || enemy.getPosX() <= -2400) {
                 this.enemies.remove(enemy);
             } else {
                 g.drawImage(enemy.getImg(), enemy.getPosX(), enemy.getPosY(), null);
@@ -60,7 +59,17 @@ public class Road extends JPanel implements ActionListener, Runnable {
     public void actionPerformed(ActionEvent e) {
         this.player.move();
         this.enemies.forEach(Enemy::move);
+        this.findCollisionWithEnemies();
         repaint();
+    }
+
+    private void findCollisionWithEnemies() {
+        this.enemies.forEach(enemy->{
+            if(this.player.getRectangle().intersects(enemy.getRectangle())){
+                JOptionPane.showMessageDialog(null, "Вы проиграли!");
+                System.exit(1);
+            }
+        });
     }
 
     @Override
